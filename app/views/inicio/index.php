@@ -33,16 +33,16 @@
         <p>Disponibilidad de medicos por dia y hora</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=especialidades/listar" class="modulo-card">
         <div class="icono">🏥</div>
         <h3>Especialidades</h3>
-        <p>Administracion de especialidades (proximamente)</p>
+        <p>Administracion de especialidades medicas</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=especialidades/listar" class="modulo-card">
         <div class="icono">💰</div>
         <h3>Servicios</h3>
-        <p>Tarifas y servicios por especialidad (proximamente)</p>
+        <p>Tarifas y servicios por especialidad</p>
     </a>
 
     <a href="#" class="modulo-card" style="opacity:0.5">
