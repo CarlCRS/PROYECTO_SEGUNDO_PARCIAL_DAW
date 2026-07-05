@@ -21,16 +21,16 @@
         <p>Historial clinico y antecedentes por paciente</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=medicos/listar" class="modulo-card">
         <div class="icono">🩺</div>
         <h3>Medicos</h3>
-        <p>Gestion de medicos y especialidades (proximamente)</p>
+        <p>Gestion de medicos y sus especialidades</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=medicos/listar" class="modulo-card">
         <div class="icono">📅</div>
         <h3>Horarios</h3>
-        <p>Disponibilidad de medicos (proximamente)</p>
+        <p>Disponibilidad de medicos por dia y hora</p>
     </a>
 
     <a href="#" class="modulo-card" style="opacity:0.5">
