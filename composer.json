@@ -1,0 +1,10 @@
+{
+    "name": "citas-medicas/app",
+    "description": "Sistema de Gestion de Citas Medicas",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    }
+}
