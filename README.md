@@ -74,8 +74,8 @@ desarrollada en PHP + MySQL siguiendo el patron MVC.
 | Horarios             | ✅ Completo   | 2          |
 | Especialidades       | ✅ Completo   | 3          |
 | Servicios / Tarifas  | ✅ Completo   | 3          |
-| Citas                | ⬜ Pendiente  | 4          |
-| Pagos                | ⬜ Pendiente  | 4          |
+| Citas                | ✅ Completo   | 4          |
+| Pagos                | ✅ Completo   | 4          |
 | Autenticacion        | ⬜ Pendiente  | Equipo     |
 
 ## Modulos del sistema
@@ -119,6 +119,24 @@ desarrollada en PHP + MySQL siguiendo el patron MVC.
 - Eliminacion de un servicio sin afectar la especialidad
 
 **Rutas implementadas:** `especialidades/listar`, `especialidades/crear`, `especialidades/guardar`, `especialidades/editar`, `especialidades/actualizar`, `especialidades/eliminar`, `servicios/listar`, `servicios/crear`, `servicios/guardar`, `servicios/editar`, `servicios/actualizar`, `servicios/eliminar`
+
+### Integrante 4 — Citas y Pagos (CRUD completo)
+
+**Citas:**
+- Listado completo de citas con paciente, medico, especialidad, fecha, hora, estado y motivo
+- Creacion de cita con seleccion de paciente y medico, validacion de fecha futura
+- Validacion de cruce de horario: no permite agendar dos citas al mismo medico en la misma fecha y hora
+- Edicion de cita con cambio de estado (pendiente, confirmada, cancelada, atendida)
+- Cancelacion mediante borrado logico (cambia estado a `cancelada`, preservando el historial)
+
+**Pagos:**
+- Listado de pagos por cita con monto formateado y metodo de pago
+- Registro de pago asociado a una cita existente
+- Validacion: monto debe ser numerico mayor a cero
+- Edicion del monto, metodo de pago (efectivo, tarjeta, transferencia) o fecha
+- Eliminacion de un pago registrado por error
+
+**Rutas implementadas:** `citas/listar`, `citas/crear`, `citas/guardar`, `citas/editar`, `citas/actualizar`, `citas/eliminar`, `pagos/listar`, `pagos/crear`, `pagos/guardar`, `pagos/editar`, `pagos/actualizar`, `pagos/eliminar`
 
 ## Despliegue en Render
 

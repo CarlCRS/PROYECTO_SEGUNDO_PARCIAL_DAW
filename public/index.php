@@ -5,6 +5,8 @@ require_once __DIR__ . "/../app/controllers/MedicoController.php";
 require_once __DIR__ . "/../app/controllers/HorarioController.php";
 require_once __DIR__ . "/../app/controllers/EspecialidadController.php";
 require_once __DIR__ . "/../app/controllers/ServicioController.php";
+require_once __DIR__ . "/../app/controllers/CitaController.php";
+require_once __DIR__ . "/../app/controllers/PagoController.php";
 require_once __DIR__ . "/../app/models/Especialidad.php";
 
 $url = $_GET["url"] ?? "inicio";
@@ -370,6 +372,131 @@ switch ($url) {
     case "servicios/eliminar":
         $id = intval($_GET["id"] ?? 0);
         $controller = new ServicioController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Citas ---- */
+    case "citas/listar":
+        $controller = new CitaController();
+        $citas = $controller->listar();
+        require __DIR__ . "/../app/views/citas/listar.php";
+        break;
+
+    case "citas/crear":
+        $controller = new CitaController();
+        $data = $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = ["paciente_id" => "", "medico_id" => "", "fecha" => "", "hora" => "", "motivo" => ""];
+        $listaPacientes = $data["pacientes"];
+        $listaMedicos = $data["medicos"];
+        require __DIR__ . "/../app/views/citas/formulario.php";
+        break;
+
+    case "citas/guardar":
+        $controller = new CitaController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaPacientes = $resultado["pacientes"];
+            $listaMedicos = $resultado["medicos"];
+            require __DIR__ . "/../app/views/citas/formulario.php";
+        }
+        break;
+
+    case "citas/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new CitaController();
+        $cita = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $cita;
+        $listaPacientes = $cita["pacientes"];
+        $listaMedicos = $cita["medicos"];
+        require __DIR__ . "/../app/views/citas/formulario.php";
+        break;
+
+    case "citas/actualizar":
+        $controller = new CitaController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaPacientes = $resultado["pacientes"];
+            $listaMedicos = $resultado["medicos"];
+            $cita = $datos;
+            require __DIR__ . "/../app/views/citas/formulario.php";
+        }
+        break;
+
+    case "citas/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new CitaController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Pagos ---- */
+    case "pagos/listar":
+        $cita_id = intval($_GET["cita_id"] ?? 0);
+        $controller = new PagoController();
+        $pagos = $controller->listar($cita_id);
+        $cita_info = Cita::obtenerPorId($cita_id);
+        require __DIR__ . "/../app/views/pagos/listar.php";
+        break;
+
+    case "pagos/crear":
+        $cita_id = intval($_GET["cita_id"] ?? 0);
+        $controller = new PagoController();
+        $data = $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = ["cita_id" => $cita_id, "monto" => "", "metodo_pago" => "", "fecha_pago" => date("Y-m-d")];
+        $listaCitas = $data["citas"];
+        require __DIR__ . "/../app/views/pagos/formulario.php";
+        break;
+
+    case "pagos/guardar":
+        $controller = new PagoController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaCitas = $resultado["citas"];
+            require __DIR__ . "/../app/views/pagos/formulario.php";
+        }
+        break;
+
+    case "pagos/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new PagoController();
+        $pago = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $pago;
+        $listaCitas = $pago["citas"];
+        require __DIR__ . "/../app/views/pagos/formulario.php";
+        break;
+
+    case "pagos/actualizar":
+        $controller = new PagoController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaCitas = $resultado["citas"];
+            $pago = $datos;
+            require __DIR__ . "/../app/views/pagos/formulario.php";
+        }
+        break;
+
+    case "pagos/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new PagoController();
         $controller->eliminar($id);
         break;
 

@@ -45,16 +45,16 @@
         <p>Tarifas y servicios por especialidad</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=citas/listar" class="modulo-card">
         <div class="icono">📆</div>
         <h3>Citas</h3>
-        <p>Agendamiento y control de citas (proximamente)</p>
+        <p>Agendamiento y control de citas medicas</p>
     </a>
 
-    <a href="#" class="modulo-card" style="opacity:0.5">
+    <a href="?url=citas/listar" class="modulo-card">
         <div class="icono">💳</div>
         <h3>Pagos</h3>
-        <p>Registro de pagos por cita (proximamente)</p>
+        <p>Registro de pagos por cita</p>
     </a>
 
 </div>
