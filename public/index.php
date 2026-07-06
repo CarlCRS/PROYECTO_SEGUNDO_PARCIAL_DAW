@@ -3,6 +3,8 @@ require_once __DIR__ . "/../app/controllers/PacienteController.php";
 require_once __DIR__ . "/../app/controllers/AntecedenteController.php";
 require_once __DIR__ . "/../app/controllers/MedicoController.php";
 require_once __DIR__ . "/../app/controllers/HorarioController.php";
+require_once __DIR__ . "/../app/controllers/EspecialidadController.php";
+require_once __DIR__ . "/../app/controllers/ServicioController.php";
 require_once __DIR__ . "/../app/models/Especialidad.php";
 
 $url = $_GET["url"] ?? "inicio";
@@ -250,6 +252,124 @@ switch ($url) {
     case "horarios/eliminar":
         $id = intval($_GET["id"] ?? 0);
         $controller = new HorarioController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Especialidades ---- */
+    case "especialidades/listar":
+        $controller = new EspecialidadController();
+        $especialidades = $controller->listar();
+        require __DIR__ . "/../app/views/especialidades/listar.php";
+        break;
+
+    case "especialidades/crear":
+        $controller = new EspecialidadController();
+        $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = [];
+        require __DIR__ . "/../app/views/especialidades/formulario.php";
+        break;
+
+    case "especialidades/guardar":
+        $controller = new EspecialidadController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            require __DIR__ . "/../app/views/especialidades/formulario.php";
+        }
+        break;
+
+    case "especialidades/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new EspecialidadController();
+        $especialidad = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $especialidad;
+        require __DIR__ . "/../app/views/especialidades/formulario.php";
+        break;
+
+    case "especialidades/actualizar":
+        $controller = new EspecialidadController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $especialidad = $datos;
+            require __DIR__ . "/../app/views/especialidades/formulario.php";
+        }
+        break;
+
+    case "especialidades/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new EspecialidadController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Servicios ---- */
+    case "servicios/listar":
+        $especialidad_id = intval($_GET["especialidad_id"] ?? 0);
+        $controller = new ServicioController();
+        $servicios = $controller->listar($especialidad_id);
+        $especialidad = Especialidad::obtenerPorId($especialidad_id);
+        $especialidad_nombre = $especialidad["nombre"] ?? "Desconocido";
+        require __DIR__ . "/../app/views/servicios/listar.php";
+        break;
+
+    case "servicios/crear":
+        $especialidad_id = intval($_GET["especialidad_id"] ?? 0);
+        $controller = new ServicioController();
+        $data = $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = ["especialidad_id" => $especialidad_id, "nombre" => "", "tarifa" => ""];
+        $listaEspecialidades = $data["especialidades"];
+        require __DIR__ . "/../app/views/servicios/formulario.php";
+        break;
+
+    case "servicios/guardar":
+        $controller = new ServicioController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaEspecialidades = $resultado["especialidades"];
+            require __DIR__ . "/../app/views/servicios/formulario.php";
+        }
+        break;
+
+    case "servicios/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new ServicioController();
+        $servicio = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $servicio;
+        $listaEspecialidades = $servicio["especialidades"];
+        require __DIR__ . "/../app/views/servicios/formulario.php";
+        break;
+
+    case "servicios/actualizar":
+        $controller = new ServicioController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaEspecialidades = $resultado["especialidades"];
+            $servicio = $datos;
+            require __DIR__ . "/../app/views/servicios/formulario.php";
+        }
+        break;
+
+    case "servicios/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new ServicioController();
         $controller->eliminar($id);
         break;
 

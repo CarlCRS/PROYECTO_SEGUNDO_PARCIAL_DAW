@@ -64,6 +64,20 @@ desarrollada en PHP + MySQL siguiendo el patron MVC.
 - **Correo:** admin@clinica.com
 - **Contraseña:** admin123
 
+## Estado del proyecto
+
+| Modulo               | Estado        | Integrante |
+| -------------------- | ------------- | ---------- |
+| Pacientes            | ✅ Completo   | 1          |
+| Antecedentes medicos | ✅ Completo   | 1          |
+| Medicos              | ✅ Completo   | 2          |
+| Horarios             | ✅ Completo   | 2          |
+| Especialidades       | ✅ Completo   | 3          |
+| Servicios / Tarifas  | ✅ Completo   | 3          |
+| Citas                | ⬜ Pendiente  | 4          |
+| Pagos                | ⬜ Pendiente  | 4          |
+| Autenticacion        | ⬜ Pendiente  | Equipo     |
+
 ## Modulos del sistema
 
 | Integrante | Entidad 1      | Entidad 2                  | Relacion                     |
@@ -72,6 +86,39 @@ desarrollada en PHP + MySQL siguiendo el patron MVC.
 | 2          | Medicos        | Horarios de disponibilidad | 1 medico → N horarios        |
 | 3          | Especialidades | Servicios / Tarifas        | 1 especialidad → N servicios |
 | 4          | Citas          | Pagos                      | 1 cita → 1 o mas pagos       |
+
+### Integrante 2 — Medicos y Horarios (CRUD completo)
+
+**Medicos:**
+- Listado de medicos con especialidad asociada (JOIN con `especialidades`)
+- Registro de nuevo medico con seleccion de especialidad
+- Edicion de datos del medico (nombre, especialidad, telefono)
+- Eliminacion con validacion de citas activas pendientes/confirmadas
+
+**Horarios de disponibilidad:**
+- Listado de horarios por medico ordenados por dia y hora
+- Registro de bloques horarios (dia de la semana, hora inicio, hora fin)
+- Validacion: hora de fin debe ser posterior a hora de inicio
+- Edicion y eliminacion de bloques de horario
+
+**Rutas implementadas:** `medicos/listar`, `medicos/crear`, `medicos/guardar`, `medicos/editar`, `medicos/actualizar`, `medicos/eliminar`, `horarios/listar`, `horarios/crear`, `horarios/guardar`, `horarios/editar`, `horarios/actualizar`, `horarios/eliminar`
+
+### Integrante 3 — Especialidades y Servicios (CRUD completo)
+
+**Especialidades:**
+- Listado de todas las especialidades medicas registradas
+- Registro de nueva especialidad
+- Edicion del nombre de la especialidad
+- Eliminacion con validacion: no permite borrar si hay medicos o servicios asociados
+
+**Servicios / Tarifas:**
+- Listado de servicios por especialidad con tarifa formateada
+- Registro de servicio asociado a una especialidad (nombre y tarifa en USD)
+- Validacion: tarifa debe ser un valor numerico mayor a cero
+- Edicion del nombre o la tarifa de un servicio
+- Eliminacion de un servicio sin afectar la especialidad
+
+**Rutas implementadas:** `especialidades/listar`, `especialidades/crear`, `especialidades/guardar`, `especialidades/editar`, `especialidades/actualizar`, `especialidades/eliminar`, `servicios/listar`, `servicios/crear`, `servicios/guardar`, `servicios/editar`, `servicios/actualizar`, `servicios/eliminar`
 
 ## Despliegue en Render
 
