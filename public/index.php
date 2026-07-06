@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . "/../app/controllers/PacienteController.php";
 require_once __DIR__ . "/../app/controllers/AntecedenteController.php";
+require_once __DIR__ . "/../app/controllers/MedicoController.php";
+require_once __DIR__ . "/../app/controllers/HorarioController.php";
+require_once __DIR__ . "/../app/models/Especialidad.php";
 
 $url = $_GET["url"] ?? "inicio";
 
@@ -125,6 +128,128 @@ switch ($url) {
     case "antecedentes/eliminar":
         $id = intval($_GET["id"] ?? 0);
         $controller = new AntecedenteController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Medicos ---- */
+    case "medicos/listar":
+        $controller = new MedicoController();
+        $medicos = $controller->listar();
+        require __DIR__ . "/../app/views/medicos/listar.php";
+        break;
+
+    case "medicos/crear":
+        $controller = new MedicoController();
+        $data = $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = [];
+        $listaEspecialidades = $data["especialidades"];
+        require __DIR__ . "/../app/views/medicos/formulario.php";
+        break;
+
+    case "medicos/guardar":
+        $controller = new MedicoController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaEspecialidades = $resultado["especialidades"];
+            require __DIR__ . "/../app/views/medicos/formulario.php";
+        }
+        break;
+
+    case "medicos/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new MedicoController();
+        $medico = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $medico;
+        $listaEspecialidades = $medico["especialidades"];
+        require __DIR__ . "/../app/views/medicos/formulario.php";
+        break;
+
+    case "medicos/actualizar":
+        $controller = new MedicoController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaEspecialidades = $resultado["especialidades"];
+            $medico = $datos;
+            require __DIR__ . "/../app/views/medicos/formulario.php";
+        }
+        break;
+
+    case "medicos/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new MedicoController();
+        $controller->eliminar($id);
+        break;
+
+        /* ---- Horarios ---- */
+    case "horarios/listar":
+        $medico_id = intval($_GET["medico_id"] ?? 0);
+        $controller = new HorarioController();
+        $horarios = $controller->listar($medico_id);
+        $medico = Medico::obtenerPorId($medico_id);
+        $medico_nombre = $medico["nombre"] ?? "Desconocido";
+        require __DIR__ . "/../app/views/horarios/listar.php";
+        break;
+
+    case "horarios/crear":
+        $medico_id = intval($_GET["medico_id"] ?? 0);
+        $controller = new HorarioController();
+        $data = $controller->crear();
+        $esEdicion = false;
+        $errores = [];
+        $datos = ["medico_id" => $medico_id, "dia_semana" => "", "hora_inicio" => "", "hora_fin" => ""];
+        $listaMedicos = $data["medicos"];
+        require __DIR__ . "/../app/views/horarios/formulario.php";
+        break;
+
+    case "horarios/guardar":
+        $controller = new HorarioController();
+        $resultado = $controller->guardar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = false;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaMedicos = $resultado["medicos"];
+            require __DIR__ . "/../app/views/horarios/formulario.php";
+        }
+        break;
+
+    case "horarios/editar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new HorarioController();
+        $horario = $controller->editar($id);
+        $esEdicion = true;
+        $errores = [];
+        $datos = $horario;
+        $listaMedicos = $horario["medicos"];
+        require __DIR__ . "/../app/views/horarios/formulario.php";
+        break;
+
+    case "horarios/actualizar":
+        $controller = new HorarioController();
+        $resultado = $controller->actualizar();
+        if (isset($resultado["errores"])) {
+            $esEdicion = true;
+            $errores = $resultado["errores"];
+            $datos = $resultado["datos"];
+            $listaMedicos = $resultado["medicos"];
+            $horario = $datos;
+            require __DIR__ . "/../app/views/horarios/formulario.php";
+        }
+        break;
+
+    case "horarios/eliminar":
+        $id = intval($_GET["id"] ?? 0);
+        $controller = new HorarioController();
         $controller->eliminar($id);
         break;
 
