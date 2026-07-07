@@ -151,7 +151,7 @@ El proyecto utiliza **Docker** para el despliegue:
 | Servicios / Tarifas  | ✅ Completo   | 3          |
 | Citas                | ✅ Completo   | 4          |
 | Pagos                | ✅ Completo   | 4          |
-| Autenticacion        | ⬜ Pendiente  | Equipo     |
+| Autenticacion        | ✅ Completo   | Equipo     |
 
 ## Modulos del sistema
 
