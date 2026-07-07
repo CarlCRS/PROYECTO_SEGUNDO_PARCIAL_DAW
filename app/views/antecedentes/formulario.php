@@ -38,9 +38,10 @@
         <label>Fecha de registro</label>
         <input type="date" name="fecha_registro" value="<?= htmlspecialchars($datos["fecha_registro"] ?? date("Y-m-d")) ?>" required>
 
-        <br><br>
-        <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
-        <a href="?url=antecedentes/listar&paciente_id=<?= $datos["paciente_id"] ?? 0 ?>" class="btn btn-secondary">Volver</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
+            <a href="?url=antecedentes/listar&paciente_id=<?= $datos["paciente_id"] ?? 0 ?>" class="btn btn-ghost">Volver</a>
+        </div>
 
     </form>
 </div>

@@ -61,9 +61,10 @@
         <label>Motivo de consulta</label>
         <textarea name="motivo" rows="3" required><?= htmlspecialchars($datos["motivo"] ?? "") ?></textarea>
 
-        <br><br>
-        <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
-        <a href="?url=citas/listar" class="btn btn-secondary">Volver</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
+            <a href="?url=citas/listar" class="btn btn-ghost">Volver</a>
+        </div>
 
     </form>
 </div>

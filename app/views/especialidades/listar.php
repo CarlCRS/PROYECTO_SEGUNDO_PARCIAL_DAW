@@ -11,36 +11,38 @@
         <div class="msg msg-exito"><?= htmlspecialchars($_GET["msg"]) ?></div>
     <?php endif; ?>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($especialidades)): ?>
-                <?php foreach ($especialidades as $e): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($e["id"]) ?></td>
-                        <td><strong><?= htmlspecialchars($e["nombre"]) ?></strong></td>
-                        <td>
-                            <div class="acciones">
-                                <a href="?url=servicios/listar&especialidad_id=<?= $e["id"] ?>" class="btn btn-primary btn-sm">Servicios</a>
-                                <a href="?url=especialidades/editar&id=<?= $e["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="?url=especialidades/eliminar&id=<?= $e["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta especialidad?')">Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="table-responsive">
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="3" style="text-align:center;padding:30px;color:#999">No hay especialidades registradas</td>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($especialidades)): ?>
+                    <?php foreach ($especialidades as $e): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($e["id"]) ?></td>
+                            <td><strong><?= htmlspecialchars($e["nombre"]) ?></strong></td>
+                            <td>
+                                <div class="acciones">
+                                    <a href="?url=servicios/listar&especialidad_id=<?= $e["id"] ?>" class="btn btn-primary btn-sm">Servicios</a>
+                                    <a href="?url=especialidades/editar&id=<?= $e["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=especialidades/eliminar&id=<?= $e["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta especialidad?')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="3" class="empty-table">No hay especialidades registradas</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <?php require __DIR__ . "/../layout/footer.php" ?>

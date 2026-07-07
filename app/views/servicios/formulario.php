@@ -38,9 +38,10 @@
         <label>Tarifa ($)</label>
         <input type="number" name="tarifa" value="<?= htmlspecialchars($datos["tarifa"] ?? "") ?>" step="0.01" min="0.01" required>
 
-        <br><br>
-        <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
-        <a href="?url=servicios/listar&especialidad_id=<?= $datos["especialidad_id"] ?? 0 ?>" class="btn btn-secondary">Volver</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
+            <a href="?url=servicios/listar&especialidad_id=<?= $datos["especialidad_id"] ?? 0 ?>" class="btn btn-ghost">Volver</a>
+        </div>
 
     </form>
 </div>

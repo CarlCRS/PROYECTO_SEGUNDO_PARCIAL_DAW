@@ -34,9 +34,10 @@
         <label>Fecha de nacimiento</label>
         <input type="date" name="fecha_nacimiento" value="<?= htmlspecialchars($datos["fecha_nacimiento"] ?? "") ?>">
 
-        <br><br>
-        <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
-        <a href="?url=pacientes/listar" class="btn btn-secondary">Volver</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
+            <a href="?url=pacientes/listar" class="btn btn-ghost">Volver</a>
+        </div>
 
     </form>
 </div>

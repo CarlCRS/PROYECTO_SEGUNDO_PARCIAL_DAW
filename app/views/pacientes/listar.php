@@ -11,42 +11,44 @@
         <div class="msg msg-exito"><?= htmlspecialchars($_GET["msg"]) ?></div>
     <?php endif; ?>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Cedula</th>
-                <th>Telefono</th>
-                <th>Fecha nac.</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($pacientes)): ?>
-                <?php foreach ($pacientes as $p): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($p["id"]) ?></td>
-                        <td><strong><?= htmlspecialchars($p["nombre"]) ?></strong></td>
-                        <td><?= htmlspecialchars($p["cedula"]) ?></td>
-                        <td><?= htmlspecialchars($p["telefono"]) ?></td>
-                        <td><?= htmlspecialchars($p["fecha_nacimiento"]) ?></td>
-                        <td>
-                            <div class="acciones">
-                                <a href="?url=antecedentes/listar&paciente_id=<?= $p["id"] ?>" class="btn btn-primary btn-sm">Antecedentes</a>
-                                <a href="?url=pacientes/editar&id=<?= $p["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="?url=pacientes/eliminar&id=<?= $p["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este paciente?')">Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="table-responsive">
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="6" style="text-align:center;padding:30px;color:#999">No hay pacientes registrados</td>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cedula</th>
+                    <th>Telefono</th>
+                    <th>Fecha nac.</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($pacientes)): ?>
+                    <?php foreach ($pacientes as $p): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($p["id"]) ?></td>
+                            <td><strong><?= htmlspecialchars($p["nombre"]) ?></strong></td>
+                            <td><?= htmlspecialchars($p["cedula"]) ?></td>
+                            <td><?= htmlspecialchars($p["telefono"]) ?></td>
+                            <td><?= htmlspecialchars($p["fecha_nacimiento"]) ?></td>
+                            <td>
+                                <div class="acciones">
+                                    <a href="?url=antecedentes/listar&paciente_id=<?= $p["id"] ?>" class="btn btn-primary btn-sm">Antecedentes</a>
+                                    <a href="?url=pacientes/editar&id=<?= $p["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=pacientes/eliminar&id=<?= $p["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este paciente?')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="empty-table">No hay pacientes registrados</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <?php require __DIR__ . "/../layout/footer.php" ?>

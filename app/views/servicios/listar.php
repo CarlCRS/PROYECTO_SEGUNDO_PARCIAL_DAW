@@ -11,40 +11,41 @@
         <div class="msg msg-exito"><?= htmlspecialchars($_GET["msg"]) ?></div>
     <?php endif; ?>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Tarifa</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($servicios)): ?>
-                <?php foreach ($servicios as $s): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($s["id"]) ?></td>
-                        <td><strong><?= htmlspecialchars($s["nombre"]) ?></strong></td>
-                        <td>$ <?= number_format(floatval($s["tarifa"]), 2) ?></td>
-                        <td>
-                            <div class="acciones">
-                                <a href="?url=servicios/editar&id=<?= $s["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="?url=servicios/eliminar&id=<?= $s["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este servicio?')">Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="table-responsive">
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="4" style="text-align:center;padding:30px;color:#999">No hay servicios registrados para esta especialidad</td>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tarifa</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($servicios)): ?>
+                    <?php foreach ($servicios as $s): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($s["id"]) ?></td>
+                            <td><strong><?= htmlspecialchars($s["nombre"]) ?></strong></td>
+                            <td>$ <?= number_format(floatval($s["tarifa"]), 2) ?></td>
+                            <td>
+                                <div class="acciones">
+                                    <a href="?url=servicios/editar&id=<?= $s["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=servicios/eliminar&id=<?= $s["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este servicio?')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="empty-table">No hay servicios registrados para esta especialidad</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-    <br>
-    <a href="?url=especialidades/listar" class="btn btn-secondary">Volver a especialidades</a>
+    <a href="?url=especialidades/listar" class="btn btn-ghost" style="margin-top:16px">Volver a especialidades</a>
 </div>
 
 <?php require __DIR__ . "/../layout/footer.php" ?>
