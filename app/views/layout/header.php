@@ -18,13 +18,29 @@
             </svg>
             Clinica Salud
         </a>
-        <ul class="nav-links">
-            <li><a href="?url=inicio" class="<?= ($url === 'inicio') ? 'active' : '' ?>">Inicio</a></li>
-            <li><a href="?url=pacientes/listar" class="<?= str_starts_with($url, 'pacientes') ? 'active' : '' ?>">Pacientes</a></li>
-            <li><a href="?url=medicos/listar" class="<?= str_starts_with($url, 'medicos') ? 'active' : '' ?>">Medicos</a></li>
-            <li><a href="?url=especialidades/listar" class="<?= str_starts_with($url, 'especialidades') ? 'active' : '' ?>">Especialidades</a></li>
-            <li><a href="?url=citas/listar" class="<?= str_starts_with($url, 'citas') ? 'active' : '' ?>">Citas</a></li>
-        </ul>
+
+        <?php if (isset($_SESSION["usuario"])): ?>
+            <ul class="nav-links">
+                <li><a href="?url=inicio" class="<?= ($url === 'inicio') ? 'active' : '' ?>">Inicio</a></li>
+                <li><a href="?url=pacientes/listar" class="<?= str_starts_with($url, 'pacientes') ? 'active' : '' ?>">Pacientes</a></li>
+                <li><a href="?url=medicos/listar" class="<?= str_starts_with($url, 'medicos') ? 'active' : '' ?>">Medicos</a></li>
+                <li><a href="?url=especialidades/listar" class="<?= str_starts_with($url, 'especialidades') ? 'active' : '' ?>">Especialidades</a></li>
+                <li><a href="?url=citas/listar" class="<?= str_starts_with($url, 'citas') ? 'active' : '' ?>">Citas</a></li>
+                <li style="color:rgba(255,255,255,0.7);padding:10px 8px;font-size:13px">
+                    👤 <?= htmlspecialchars($_SESSION["usuario"]) ?>
+                    <span style="background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-size:11px;margin-left:4px">
+                        <?= htmlspecialchars($_SESSION["rol"]) ?>
+                    </span>
+                </li>
+                <li><a href="?url=auth/logout" style="color:#f5b7b1">Cerrar sesion</a></li>
+            </ul>
+        <?php else: ?>
+            <ul class="nav-links">
+                <li><a href="?url=inicio">Inicio</a></li>
+                <li><a href="?url=auth/login">Iniciar sesion</a></li>
+                <li><a href="?url=auth/registro">Registrarse</a></li>
+            </ul>
+        <?php endif; ?>
     </nav>
 
     <div class="main-container">
