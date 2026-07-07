@@ -38,9 +38,10 @@
         <label>Telefono</label>
         <input type="text" name="telefono" value="<?= htmlspecialchars($datos["telefono"] ?? "") ?>" pattern="[0-9]+" title="Solo digitos">
 
-        <br><br>
-        <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
-        <a href="?url=medicos/listar" class="btn btn-secondary">Volver</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><?= $esEdicion ? "Actualizar" : "Guardar" ?></button>
+            <a href="?url=medicos/listar" class="btn btn-ghost">Volver</a>
+        </div>
 
     </form>
 </div>

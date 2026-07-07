@@ -1,13 +1,16 @@
 <?php $titulo = "Iniciar sesion"; ?>
 <?php require __DIR__ . "/../layout/header.php" ?>
 
-<div style="max-width:400px;margin:40px auto">
+<div class="auth-container">
     <div class="card">
-        <div style="text-align:center;margin-bottom:25px">
-            <div style="font-size:48px;margin-bottom:10px">🏥</div>
-            <h1 style="font-size:22px;color:#1a5276">Iniciar sesion</h1>
-            <p style="color:#7f8c8d;font-size:14px">Ingrese sus credenciales para acceder</p>
-        </div>
+        <span class="auth-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12h6M12 9v6"/>
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+            </svg>
+        </span>
+        <h1>Iniciar sesion</h1>
+        <p class="auth-subtitle">Ingrese sus credenciales para acceder</p>
 
         <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
             <div class="msg msg-exito"><?= htmlspecialchars($_GET["msg"]) ?></div>
@@ -23,20 +26,21 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="?url=auth/autenticar" style="margin:0 auto">
+        <form method="POST" action="?url=auth/autenticar">
             <label>Correo electronico</label>
             <input type="email" name="email" required>
 
             <label>Contraseña</label>
             <input type="password" name="password" required>
 
-            <br><br>
-            <button type="submit" class="btn btn-primary" style="width:100%">Ingresar</button>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
+            </div>
         </form>
 
-        <p style="text-align:center;margin-top:20px;font-size:14px;color:#7f8c8d">
+        <p class="auth-footer">
             ¿No tienes cuenta?
-            <a href="?url=auth/registro" style="color:#2e86c1;text-decoration:none;font-weight:600">Registrarse</a>
+            <a href="?url=auth/registro">Registrarse</a>
         </p>
     </div>
 </div>
