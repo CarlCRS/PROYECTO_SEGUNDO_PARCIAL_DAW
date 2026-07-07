@@ -10,20 +10,11 @@ require_once __DIR__ . "/../app/controllers/EspecialidadController.php";
 require_once __DIR__ . "/../app/controllers/ServicioController.php";
 require_once __DIR__ . "/../app/controllers/CitaController.php";
 require_once __DIR__ . "/../app/controllers/PagoController.php";
-require_once __DIR__ . "/../app/models/Especialidad.php";
 
 function requiereAuth()
 {
     if (!isset($_SESSION["usuario"])) {
         header("Location: ?url=auth/login&msg=" . urlencode("Debe iniciar sesion primero"));
-        exit;
-    }
-}
-
-function requiereRol($rol)
-{
-    if ($_SESSION["rol"] !== $rol && $_SESSION["rol"] !== "admin") {
-        header("Location: ?url=inicio&msg=" . urlencode("Acceso denegado"));
         exit;
     }
 }
@@ -71,6 +62,7 @@ switch ($url) {
 
         /* ---- Inicio ---- */
     case "inicio":
+        requiereAuth();
         require __DIR__ . "/../app/views/inicio/index.php";
         break;
 
@@ -206,12 +198,14 @@ switch ($url) {
 
         /* ---- Medicos ---- */
     case "medicos/listar":
+        requiereAuth();
         $controller = new MedicoController();
         $medicos = $controller->listar();
         require __DIR__ . "/../app/views/medicos/listar.php";
         break;
 
     case "medicos/crear":
+        requiereAuth();
         $controller = new MedicoController();
         $data = $controller->crear();
         $esEdicion = false;
@@ -222,6 +216,7 @@ switch ($url) {
         break;
 
     case "medicos/guardar":
+        requiereAuth();
         $controller = new MedicoController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -234,6 +229,7 @@ switch ($url) {
         break;
 
     case "medicos/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new MedicoController();
         $medico = $controller->editar($id);
@@ -245,6 +241,7 @@ switch ($url) {
         break;
 
     case "medicos/actualizar":
+        requiereAuth();
         $controller = new MedicoController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -258,6 +255,7 @@ switch ($url) {
         break;
 
     case "medicos/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new MedicoController();
         $controller->eliminar($id);
@@ -265,6 +263,7 @@ switch ($url) {
 
         /* ---- Horarios ---- */
     case "horarios/listar":
+        requiereAuth();
         $medico_id = intval($_GET["medico_id"] ?? 0);
         $controller = new HorarioController();
         $horarios = $controller->listar($medico_id);
@@ -274,6 +273,7 @@ switch ($url) {
         break;
 
     case "horarios/crear":
+        requiereAuth();
         $medico_id = intval($_GET["medico_id"] ?? 0);
         $controller = new HorarioController();
         $data = $controller->crear();
@@ -285,6 +285,7 @@ switch ($url) {
         break;
 
     case "horarios/guardar":
+        requiereAuth();
         $controller = new HorarioController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -297,6 +298,7 @@ switch ($url) {
         break;
 
     case "horarios/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new HorarioController();
         $horario = $controller->editar($id);
@@ -308,6 +310,7 @@ switch ($url) {
         break;
 
     case "horarios/actualizar":
+        requiereAuth();
         $controller = new HorarioController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -321,6 +324,7 @@ switch ($url) {
         break;
 
     case "horarios/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new HorarioController();
         $controller->eliminar($id);
@@ -328,12 +332,14 @@ switch ($url) {
 
         /* ---- Especialidades ---- */
     case "especialidades/listar":
+        requiereAuth();
         $controller = new EspecialidadController();
         $especialidades = $controller->listar();
         require __DIR__ . "/../app/views/especialidades/listar.php";
         break;
 
     case "especialidades/crear":
+        requiereAuth();
         $controller = new EspecialidadController();
         $controller->crear();
         $esEdicion = false;
@@ -343,6 +349,7 @@ switch ($url) {
         break;
 
     case "especialidades/guardar":
+        requiereAuth();
         $controller = new EspecialidadController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -354,6 +361,7 @@ switch ($url) {
         break;
 
     case "especialidades/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new EspecialidadController();
         $especialidad = $controller->editar($id);
@@ -364,6 +372,7 @@ switch ($url) {
         break;
 
     case "especialidades/actualizar":
+        requiereAuth();
         $controller = new EspecialidadController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -376,6 +385,7 @@ switch ($url) {
         break;
 
     case "especialidades/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new EspecialidadController();
         $controller->eliminar($id);
@@ -383,6 +393,7 @@ switch ($url) {
 
         /* ---- Servicios ---- */
     case "servicios/listar":
+        requiereAuth();
         $especialidad_id = intval($_GET["especialidad_id"] ?? 0);
         $controller = new ServicioController();
         $servicios = $controller->listar($especialidad_id);
@@ -392,6 +403,7 @@ switch ($url) {
         break;
 
     case "servicios/crear":
+        requiereAuth();
         $especialidad_id = intval($_GET["especialidad_id"] ?? 0);
         $controller = new ServicioController();
         $data = $controller->crear();
@@ -403,6 +415,7 @@ switch ($url) {
         break;
 
     case "servicios/guardar":
+        requiereAuth();
         $controller = new ServicioController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -415,6 +428,7 @@ switch ($url) {
         break;
 
     case "servicios/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new ServicioController();
         $servicio = $controller->editar($id);
@@ -426,6 +440,7 @@ switch ($url) {
         break;
 
     case "servicios/actualizar":
+        requiereAuth();
         $controller = new ServicioController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -439,6 +454,7 @@ switch ($url) {
         break;
 
     case "servicios/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new ServicioController();
         $controller->eliminar($id);
@@ -446,12 +462,14 @@ switch ($url) {
 
         /* ---- Citas ---- */
     case "citas/listar":
+        requiereAuth();
         $controller = new CitaController();
         $citas = $controller->listar();
         require __DIR__ . "/../app/views/citas/listar.php";
         break;
 
     case "citas/crear":
+        requiereAuth();
         $controller = new CitaController();
         $data = $controller->crear();
         $esEdicion = false;
@@ -463,6 +481,7 @@ switch ($url) {
         break;
 
     case "citas/guardar":
+        requiereAuth();
         $controller = new CitaController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -476,6 +495,7 @@ switch ($url) {
         break;
 
     case "citas/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new CitaController();
         $cita = $controller->editar($id);
@@ -488,6 +508,7 @@ switch ($url) {
         break;
 
     case "citas/actualizar":
+        requiereAuth();
         $controller = new CitaController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -502,6 +523,7 @@ switch ($url) {
         break;
 
     case "citas/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new CitaController();
         $controller->eliminar($id);
@@ -509,6 +531,7 @@ switch ($url) {
 
         /* ---- Pagos ---- */
     case "pagos/listar":
+        requiereAuth();
         $cita_id = intval($_GET["cita_id"] ?? 0);
         $controller = new PagoController();
         $pagos = $controller->listar($cita_id);
@@ -517,6 +540,7 @@ switch ($url) {
         break;
 
     case "pagos/crear":
+        requiereAuth();
         $cita_id = intval($_GET["cita_id"] ?? 0);
         $controller = new PagoController();
         $data = $controller->crear();
@@ -528,6 +552,7 @@ switch ($url) {
         break;
 
     case "pagos/guardar":
+        requiereAuth();
         $controller = new PagoController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -540,6 +565,7 @@ switch ($url) {
         break;
 
     case "pagos/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new PagoController();
         $pago = $controller->editar($id);
@@ -551,6 +577,7 @@ switch ($url) {
         break;
 
     case "pagos/actualizar":
+        requiereAuth();
         $controller = new PagoController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -564,6 +591,7 @@ switch ($url) {
         break;
 
     case "pagos/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new PagoController();
         $controller->eliminar($id);
