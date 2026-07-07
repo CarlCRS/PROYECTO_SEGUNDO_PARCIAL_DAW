@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+require_once __DIR__ . "/../app/controllers/AuthController.php";
 require_once __DIR__ . "/../app/controllers/PacienteController.php";
 require_once __DIR__ . "/../app/controllers/AntecedenteController.php";
 require_once __DIR__ . "/../app/controllers/MedicoController.php";
@@ -9,9 +12,63 @@ require_once __DIR__ . "/../app/controllers/CitaController.php";
 require_once __DIR__ . "/../app/controllers/PagoController.php";
 require_once __DIR__ . "/../app/models/Especialidad.php";
 
-$url = $_GET["url"] ?? "inicio";
+function requiereAuth()
+{
+    if (!isset($_SESSION["usuario"])) {
+        header("Location: ?url=auth/login&msg=" . urlencode("Debe iniciar sesion primero"));
+        exit;
+    }
+}
+
+function requiereRol($rol)
+{
+    if ($_SESSION["rol"] !== $rol && $_SESSION["rol"] !== "admin") {
+        header("Location: ?url=inicio&msg=" . urlencode("Acceso denegado"));
+        exit;
+    }
+}
+
+$url = $_GET["url"] ?? "auth/login";
 
 switch ($url) {
+        /* ---- Auth ---- */
+    case "auth/login":
+        $controller = new AuthController();
+        $controller->login();
+        $errores = [];
+        require __DIR__ . "/../app/views/auth/login.php";
+        break;
+
+    case "auth/autenticar":
+        $controller = new AuthController();
+        $resultado = $controller->autenticar();
+        if (isset($resultado["errores"])) {
+            $errores = $resultado["errores"];
+            require __DIR__ . "/../app/views/auth/login.php";
+        }
+        break;
+
+    case "auth/registro":
+        $controller = new AuthController();
+        $controller->registro();
+        $errores = [];
+        require __DIR__ . "/../app/views/auth/registro.php";
+        break;
+
+    case "auth/registrar":
+        $controller = new AuthController();
+        $resultado = $controller->registrar();
+        if (isset($resultado["errores"])) {
+            $errores = $resultado["errores"];
+            require __DIR__ . "/../app/views/auth/registro.php";
+        }
+        break;
+
+    case "auth/logout":
+        $controller = new AuthController();
+        $controller->logout();
+        break;
+
         /* ---- Inicio ---- */
     case "inicio":
         require __DIR__ . "/../app/views/inicio/index.php";
@@ -19,12 +76,14 @@ switch ($url) {
 
         /* ---- Pacientes ---- */
     case "pacientes/listar":
+        requiereAuth();
         $controller = new PacienteController();
         $pacientes = $controller->listar();
         require __DIR__ . "/../app/views/pacientes/listar.php";
         break;
 
     case "pacientes/crear":
+        requiereAuth();
         $controller = new PacienteController();
         $controller->crear();
         $esEdicion = false;
@@ -34,6 +93,7 @@ switch ($url) {
         break;
 
     case "pacientes/guardar":
+        requiereAuth();
         $controller = new PacienteController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -45,6 +105,7 @@ switch ($url) {
         break;
 
     case "pacientes/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new PacienteController();
         $paciente = $controller->editar($id);
@@ -55,6 +116,7 @@ switch ($url) {
         break;
 
     case "pacientes/actualizar":
+        requiereAuth();
         $controller = new PacienteController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -67,6 +129,7 @@ switch ($url) {
         break;
 
     case "pacientes/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new PacienteController();
         $controller->eliminar($id);
@@ -74,6 +137,7 @@ switch ($url) {
 
         /* ---- Antecedentes ---- */
     case "antecedentes/listar":
+        requiereAuth();
         $paciente_id = intval($_GET["paciente_id"] ?? 0);
         $controller = new AntecedenteController();
         $antecedentes = $controller->listar($paciente_id);
@@ -83,6 +147,7 @@ switch ($url) {
         break;
 
     case "antecedentes/crear":
+        requiereAuth();
         $paciente_id = intval($_GET["paciente_id"] ?? 0);
         $controller = new AntecedenteController();
         $data = $controller->crear();
@@ -94,6 +159,7 @@ switch ($url) {
         break;
 
     case "antecedentes/guardar":
+        requiereAuth();
         $controller = new AntecedenteController();
         $resultado = $controller->guardar();
         if (isset($resultado["errores"])) {
@@ -106,6 +172,7 @@ switch ($url) {
         break;
 
     case "antecedentes/editar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new AntecedenteController();
         $antecedente = $controller->editar($id);
@@ -117,6 +184,7 @@ switch ($url) {
         break;
 
     case "antecedentes/actualizar":
+        requiereAuth();
         $controller = new AntecedenteController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
@@ -130,6 +198,7 @@ switch ($url) {
         break;
 
     case "antecedentes/eliminar":
+        requiereAuth();
         $id = intval($_GET["id"] ?? 0);
         $controller = new AntecedenteController();
         $controller->eliminar($id);
