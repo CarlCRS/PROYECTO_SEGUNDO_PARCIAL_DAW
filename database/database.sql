@@ -91,4 +91,4 @@ INSERT INTO especialidades (nombre) VALUES
 ('Dermatologia');
 
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
-('Admin Sistema', 'admin@clinica.com', '$2y$10$hashDeEjemplo', 'admin');
+('Admin Sistema', 'admin@clinica.com', '$2y$10$r94sn/vVs/PHNFEkxYo6A.OBkyaLuW9VWjoVa3aexNzYz5EeH8tUO', 'admin');
