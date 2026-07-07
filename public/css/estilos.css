@@ -369,7 +369,21 @@ a:hover {
   height: 2px;
   background: var(--color-navbar-text);
   border-radius: 2px;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
+  transform-origin: center;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ========== MAIN CONTAINER ========== */
@@ -778,49 +792,62 @@ textarea {
 
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 16px;
-    position: relative;
+    padding: 0 12px;
   }
 
   .navbar .nav-links {
-    display: none;
-    position: absolute;
-    top: var(--header-height);
+    display: flex;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     background: var(--color-navbar);
     flex-direction: column;
-    padding: 8px;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: calc(var(--header-height) + var(--notification-bar-height) + 8px) 12px 12px;
     gap: 2px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: var(--shadow-lg);
-    z-index: 99;
+    z-index: 200;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
   }
 
   .navbar .nav-links.open {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
   }
 
   .navbar .nav-links li a {
     display: block;
-    padding: 10px 14px;
+    padding: 14px 16px;
     border-radius: var(--radius-sm);
-    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-navbar-text);
+  }
+
+  .navbar .nav-links li a:active {
+    background: var(--color-navbar-hover);
   }
 
   .navbar .nav-links li {
     width: 100%;
+    list-style: none;
   }
 
   .navbar .user-badge-mobile {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
+    gap: 10px;
+    padding: 16px;
     color: var(--color-navbar-text);
-    font-size: 0.8125rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    margin-top: 4px;
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 12px;
     flex-wrap: wrap;
   }
 
@@ -828,14 +855,26 @@ textarea {
     margin-left: auto;
     color: #f87171;
     font-weight: 500;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .navbar .user-badge-mobile .logout-link:active {
+    background: rgba(248, 113, 113, 0.1);
   }
 
   .navbar .user-badge {
     display: none;
   }
 
+  .nav-backdrop {
+    display: none;
+  }
+
   .hamburger {
     display: flex;
+    position: relative;
+    z-index: 201;
   }
 
   .notification-bar .notif-container {
