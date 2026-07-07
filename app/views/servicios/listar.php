@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Servicios de <?= htmlspecialchars($especialidad_nombre) ?></h1>
-        <a href="?url=servicios/crear&especialidad_id=<?= $especialidad_id ?>" class="btn btn-success">+ Nuevo servicio</a>
+        <a href="?url=servicios/crear&especialidad_id=<?= $especialidad_id ?>" class="btn btn-primary">+ Nuevo servicio</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -30,7 +30,7 @@
                             <td>$ <?= number_format(floatval($s["tarifa"]), 2) ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=servicios/editar&id=<?= $s["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=servicios/editar&id=<?= $s["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=servicios/eliminar&id=<?= $s["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este servicio?')">Eliminar</a>
                                 </div>
                             </td>

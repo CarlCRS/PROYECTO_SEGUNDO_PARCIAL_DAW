@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Pagos de cita #<?= htmlspecialchars($cita_id) ?></h1>
-        <a href="?url=pagos/crear&cita_id=<?= $cita_id ?>" class="btn btn-success">+ Nuevo pago</a>
+        <a href="?url=pagos/crear&cita_id=<?= $cita_id ?>" class="btn btn-primary">+ Nuevo pago</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -40,7 +40,7 @@
                             <td><?= htmlspecialchars($p["fecha_pago"]) ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=pagos/editar&id=<?= $p["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=pagos/editar&id=<?= $p["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=pagos/eliminar&id=<?= $p["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este pago?')">Eliminar</a>
                                 </div>
                             </td>

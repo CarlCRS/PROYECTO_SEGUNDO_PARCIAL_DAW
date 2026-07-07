@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Antecedentes de <?= htmlspecialchars($paciente_nombre) ?></h1>
-        <a href="?url=antecedentes/crear&paciente_id=<?= $paciente_id ?>" class="btn btn-success">+ Nuevo antecedente</a>
+        <a href="?url=antecedentes/crear&paciente_id=<?= $paciente_id ?>" class="btn btn-primary">+ Nuevo antecedente</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -30,7 +30,7 @@
                             <td><?= htmlspecialchars($a["fecha_registro"]) ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=antecedentes/editar&id=<?= $a["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=antecedentes/editar&id=<?= $a["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=antecedentes/eliminar&id=<?= $a["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este antecedente?')">Eliminar</a>
                                 </div>
                             </td>

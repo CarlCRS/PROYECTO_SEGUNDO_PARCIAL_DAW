@@ -2,9 +2,15 @@
 <?php require __DIR__ . "/../layout/header.php" ?>
 
 <div class="hero">
-    <span class="badge">Desarrollo Web con PHP y MySQL</span>
-    <h1>Sistema de Gestion de Citas Medicas</h1>
-    <p>Plataforma integral para la administracion de pacientes, medicos, especialidades y citas medicas. Desarrollada con arquitectura MVC.</p>
+    <div class="hero-bg">
+        <img src="img/hero-doctor.jpg" alt="Consulta medica" loading="lazy">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="badge">Desarrollo Web con PHP y MySQL</span>
+        <h1>Sistema de Gestion de Citas Medicas</h1>
+        <p>Plataforma integral para la administracion de pacientes, medicos, especialidades y citas medicas. Desarrollada con arquitectura MVC.</p>
+    </div>
 </div>
 
 <div class="grid-cards">

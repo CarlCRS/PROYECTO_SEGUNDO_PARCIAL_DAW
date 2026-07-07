@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Pacientes registrados</h1>
-        <a href="?url=pacientes/crear" class="btn btn-success">+ Nuevo paciente</a>
+        <a href="?url=pacientes/crear" class="btn btn-primary">+ Nuevo paciente</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -34,8 +34,8 @@
                             <td><?= htmlspecialchars($p["fecha_nacimiento"]) ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=antecedentes/listar&paciente_id=<?= $p["id"] ?>" class="btn btn-primary btn-sm">Antecedentes</a>
-                                    <a href="?url=pacientes/editar&id=<?= $p["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=antecedentes/listar&paciente_id=<?= $p["id"] ?>" class="btn btn-ghost btn-sm">Antecedentes</a>
+                                    <a href="?url=pacientes/editar&id=<?= $p["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=pacientes/eliminar&id=<?= $p["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este paciente?')">Eliminar</a>
                                 </div>
                             </td>

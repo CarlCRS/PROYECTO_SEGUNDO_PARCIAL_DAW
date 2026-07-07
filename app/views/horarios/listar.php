@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Horarios de <?= htmlspecialchars($medico_nombre) ?></h1>
-        <a href="?url=horarios/crear&medico_id=<?= $medico_id ?>" class="btn btn-success">+ Nuevo horario</a>
+        <a href="?url=horarios/crear&medico_id=<?= $medico_id ?>" class="btn btn-primary">+ Nuevo horario</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -32,7 +32,7 @@
                             <td><?= htmlspecialchars($h["hora_fin"]) ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=horarios/editar&id=<?= $h["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=horarios/editar&id=<?= $h["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=horarios/eliminar&id=<?= $h["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este horario?')">Eliminar</a>
                                 </div>
                             </td>

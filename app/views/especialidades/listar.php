@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Especialidades registradas</h1>
-        <a href="?url=especialidades/crear" class="btn btn-success">+ Nueva especialidad</a>
+        <a href="?url=especialidades/crear" class="btn btn-primary">+ Nueva especialidad</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -28,8 +28,8 @@
                             <td><strong><?= htmlspecialchars($e["nombre"]) ?></strong></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=servicios/listar&especialidad_id=<?= $e["id"] ?>" class="btn btn-primary btn-sm">Servicios</a>
-                                    <a href="?url=especialidades/editar&id=<?= $e["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="?url=servicios/listar&especialidad_id=<?= $e["id"] ?>" class="btn btn-ghost btn-sm">Servicios</a>
+                                    <a href="?url=especialidades/editar&id=<?= $e["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                     <a href="?url=especialidades/eliminar&id=<?= $e["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta especialidad?')">Eliminar</a>
                                 </div>
                             </td>

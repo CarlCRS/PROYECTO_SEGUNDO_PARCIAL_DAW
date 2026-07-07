@@ -34,7 +34,7 @@
             <input type="password" name="password" minlength="6" required>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-success btn-full">Crear cuenta</button>
+                <button type="submit" class="btn btn-primary btn-full">Crear cuenta</button>
             </div>
         </form>
 

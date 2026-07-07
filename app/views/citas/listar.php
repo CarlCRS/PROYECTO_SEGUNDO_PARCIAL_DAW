@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">
         <h1>Citas registradas</h1>
-        <a href="?url=citas/crear" class="btn btn-success">+ Nueva cita</a>
+        <a href="?url=citas/crear" class="btn btn-primary">+ Nueva cita</a>
     </div>
 
     <?php if (isset($_GET["msg"]) && $_GET["msg"] !== ""): ?>
@@ -44,9 +44,9 @@
                             <td><?= htmlspecialchars($c["motivo"] ?? "") ?></td>
                             <td>
                                 <div class="acciones">
-                                    <a href="?url=pagos/listar&cita_id=<?= $c["id"] ?>" class="btn btn-primary btn-sm">Pagos</a>
+                                    <a href="?url=pagos/listar&cita_id=<?= $c["id"] ?>" class="btn btn-ghost btn-sm">Pagos</a>
                                     <?php if ($c["estado"] !== "cancelada" && $c["estado"] !== "atendida"): ?>
-                                        <a href="?url=citas/editar&id=<?= $c["id"] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="?url=citas/editar&id=<?= $c["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
                                         <a href="?url=citas/eliminar&id=<?= $c["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
                                     <?php endif; ?>
                                 </div>
