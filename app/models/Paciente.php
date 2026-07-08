@@ -70,6 +70,15 @@ class Paciente
         return $stmt->execute([":id" => $id]);
     }
 
+    public static function obtenerPorUsuarioId($usuarioId)
+    {
+        $pdo = obtenerConexion();
+        $sql = "SELECT * FROM pacientes WHERE usuario_id = :usuario_id LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":usuario_id" => $usuarioId]);
+        return $stmt->fetch();
+    }
+
     public static function existeCedula($cedula, $excluirId = null)
     {
         $pdo = obtenerConexion();

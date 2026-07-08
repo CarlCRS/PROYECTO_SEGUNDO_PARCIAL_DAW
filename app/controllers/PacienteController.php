@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/Paciente.php";
+require_once __DIR__ . "/../models/Usuario.php";
 
 class PacienteController
 {
@@ -11,7 +12,8 @@ class PacienteController
 
     public function crear()
     {
-        return [];
+        $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+        return ["usuarios" => $usuarios];
     }
 
     public function guardar()
@@ -34,7 +36,8 @@ class PacienteController
         }
 
         if (!empty($errores)) {
-            return ["errores" => $errores, "datos" => $_POST];
+            $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+            return ["errores" => $errores, "datos" => $_POST, "usuarios" => $usuarios];
         }
 
         $datos = [
@@ -50,7 +53,8 @@ class PacienteController
             exit;
         }
 
-        return ["errores" => ["Error al registrar el paciente"], "datos" => $_POST];
+        $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+        return ["errores" => ["Error al registrar el paciente"], "datos" => $_POST, "usuarios" => $usuarios];
     }
 
     public function editar($id)
@@ -60,6 +64,14 @@ class PacienteController
             header("Location: ?url=pacientes/listar&msg=" . urlencode("Paciente no encontrado"));
             exit;
         }
+        $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+        if ($paciente["usuario_id"]) {
+            $actual = Usuario::obtenerPorId($paciente["usuario_id"]);
+            if ($actual) {
+                array_unshift($usuarios, $actual);
+            }
+        }
+        $paciente["usuarios"] = $usuarios;
         return $paciente;
     }
 
@@ -87,7 +99,8 @@ class PacienteController
         }
 
         if (!empty($errores)) {
-            return ["errores" => $errores, "datos" => $_POST];
+            $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+            return ["errores" => $errores, "datos" => $_POST, "usuarios" => $usuarios];
         }
 
         $datos = [
@@ -103,7 +116,8 @@ class PacienteController
             exit;
         }
 
-        return ["errores" => ["Error al actualizar el paciente"], "datos" => $_POST];
+        $usuarios = Usuario::obtenerPorRolNoVinculadoPaciente("paciente");
+        return ["errores" => ["Error al actualizar el paciente"], "datos" => $_POST, "usuarios" => $usuarios];
     }
 
     public function eliminar($id)
