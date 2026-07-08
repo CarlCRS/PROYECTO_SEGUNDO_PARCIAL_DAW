@@ -15,6 +15,11 @@
             <span><strong>Paciente:</strong> <?= htmlspecialchars($cita_info["paciente_nombre"]) ?></span>
             <span><strong>Medico:</strong> <?= htmlspecialchars($cita_info["medico_nombre"]) ?></span>
             <span><strong>Fecha:</strong> <?= htmlspecialchars($cita_info["fecha"]) ?> <?= htmlspecialchars($cita_info["hora"]) ?></span>
+            <span><strong>Estado cita:</strong>
+                <span class="estado estado-<?= htmlspecialchars($cita_info["estado"]) ?>">
+                    <?= ucfirst(htmlspecialchars($cita_info["estado"])) ?>
+                </span>
+            </span>
         </div>
     <?php endif; ?>
 
@@ -45,7 +50,9 @@
                             <td><?= htmlspecialchars($p["fecha_pago"]) ?></td>
                             <td>
                                 <div class="acciones">
+                                    <?php if ($_SESSION["rol"] === "admin"): ?>
                                     <a href="?url=pagos/editar&id=<?= $p["id"] ?>" class="btn btn-ghost btn-sm">Editar</a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>

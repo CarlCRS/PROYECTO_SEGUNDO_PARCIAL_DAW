@@ -34,6 +34,17 @@ class AuthController
         $_SESSION["id_usuario"] = $usuario["id"];
         $_SESSION["rol"] = $usuario["rol"];
 
+        if ($usuario["rol"] === "paciente" && !Paciente::obtenerPorUsuarioId($usuario["id"])) {
+            $cedulaTemp = "TEMP-" . $usuario["id"] . "-" . time();
+            Paciente::crear([
+                "usuario_id"       => $usuario["id"],
+                "nombre"           => $usuario["nombre"],
+                "cedula"           => $cedulaTemp,
+                "telefono"         => "",
+                "fecha_nacimiento" => null,
+            ]);
+        }
+
         header("Location: ?url=inicio");
         exit;
     }

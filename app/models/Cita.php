@@ -11,6 +11,7 @@ class Cita
                 FROM medicos m
                 LEFT JOIN servicios s ON m.especialidad_id = s.especialidad_id
                 WHERE m.id = :medico_id
+                ORDER BY s.tarifa ASC
                 LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([":medico_id" => $medicoId]);
@@ -101,7 +102,7 @@ class Cita
                 "metodo_pago" => "pendiente",
                 "fecha_pago"  => date("Y-m-d"),
             ];
-            Pago::crear($pagoDatos);
+            Pago::crear($pagoDatos, $pdo);
 
             $pdo->commit();
             return $citaId;

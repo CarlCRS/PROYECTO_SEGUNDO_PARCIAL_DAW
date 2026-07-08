@@ -297,20 +297,20 @@ try {
     // ============================================================
     $pagosData = [
         // Pago para la cita confirmada de Juan Perez con Dr. Mendoza el 2026-07-08
-        ["citaKey" => "Juan Perez Lopez|Dr. Ricardo Mendoza|2026-07-08|09:00",     "monto" => 800.00,  "metodo" => "efectivo",     "fecha" => "2026-07-08"],
+        ["citaKey" => "Juan Perez Lopez|Dr. Ricardo Mendoza|2026-07-08|09:00",     "monto" => 800.00,  "estado" => "pagado", "metodo" => "efectivo",     "fecha" => "2026-07-08"],
         // Pago para la cita confirmada de Pedro Hernandez con Dr. Gutierrez el 2026-07-10
-        ["citaKey" => "Pedro Hernandez Cruz|Dr. Carlos Gutierrez|2026-07-10|11:00", "monto" => 1500.00, "metodo" => "tarjeta",     "fecha" => "2026-07-10"],
+        ["citaKey" => "Pedro Hernandez Cruz|Dr. Carlos Gutierrez|2026-07-10|11:00", "monto" => 1500.00, "estado" => "pagado", "metodo" => "tarjeta",     "fecha" => "2026-07-10"],
         // Pago para la cita confirmada de Roberto Diaz con Dr. Mendoza el 2026-07-15
-        ["citaKey" => "Roberto Diaz Castillo|Dr. Ricardo Mendoza|2026-07-15|10:00", "monto" => 800.00,  "metodo" => "transferencia", "fecha" => "2026-07-15"],
+        ["citaKey" => "Roberto Diaz Castillo|Dr. Ricardo Mendoza|2026-07-15|10:00", "monto" => 800.00,  "estado" => "pagado", "metodo" => "transferencia", "fecha" => "2026-07-15"],
         // Pago para citas atendidas (pasadas)
-        ["citaKey" => "Juan Perez Lopez|Dr. Ricardo Mendoza|2026-06-24|09:00",      "monto" => 800.00,  "metodo" => "efectivo",     "fecha" => "2026-06-24"],
-        ["citaKey" => "Laura Martinez Sanchez|Dra. Maria Fernanda Lopez|2026-06-18|10:00", "monto" => 1500.00, "metodo" => "tarjeta", "fecha" => "2026-06-18"],
-        ["citaKey" => "Roberto Diaz Castillo|Dr. Ricardo Mendoza|2026-06-15|10:00",  "monto" => 800.00,  "metodo" => "efectivo",     "fecha" => "2026-06-15"],
-        ["citaKey" => "Maria Garcia Rodriguez|Dra. Ana Lucia Torres|2026-06-10|10:30", "monto" => 1000.00, "metodo" => "transferencia", "fecha" => "2026-06-10"],
-        ["citaKey" => "Sofia Ramirez Gomez|Dr. Ricardo Mendoza|2026-06-29|11:00",    "monto" => 800.00,  "metodo" => "efectivo",     "fecha" => "2026-06-29"],
+        ["citaKey" => "Juan Perez Lopez|Dr. Ricardo Mendoza|2026-06-24|09:00",      "monto" => 800.00,  "estado" => "pagado", "metodo" => "efectivo",     "fecha" => "2026-06-24"],
+        ["citaKey" => "Laura Martinez Sanchez|Dra. Maria Fernanda Lopez|2026-06-18|10:00", "monto" => 1500.00, "estado" => "pagado", "metodo" => "tarjeta", "fecha" => "2026-06-18"],
+        ["citaKey" => "Roberto Diaz Castillo|Dr. Ricardo Mendoza|2026-06-15|10:00",  "monto" => 800.00,  "estado" => "pagado", "metodo" => "efectivo",     "fecha" => "2026-06-15"],
+        ["citaKey" => "Maria Garcia Rodriguez|Dra. Ana Lucia Torres|2026-06-10|10:30", "monto" => 1000.00, "estado" => "pagado", "metodo" => "transferencia", "fecha" => "2026-06-10"],
+        ["citaKey" => "Sofia Ramirez Gomez|Dr. Ricardo Mendoza|2026-06-29|11:00",    "monto" => 800.00,  "estado" => "pagado", "metodo" => "efectivo",     "fecha" => "2026-06-29"],
     ];
 
-    $stmtPag = $db->prepare("INSERT IGNORE INTO pagos (cita_id, monto, metodo_pago, fecha_pago) VALUES (?, ?, ?, ?)");
+    $stmtPag = $db->prepare("INSERT IGNORE INTO pagos (cita_id, monto, estado_pago, metodo_pago, fecha_pago) VALUES (?, ?, ?, ?, ?)");
 
     foreach ($pagosData as $p) {
         $citaId = $citaIdMap[$p["citaKey"]] ?? null;
@@ -318,15 +318,14 @@ try {
             echo "  ERROR: Cita no encontrada: {$p["citaKey"]}\n";
             continue;
         }
-        // check if pago already exists for this cita
         $existing = $db->prepare("SELECT id FROM pagos WHERE cita_id = ?");
         $existing->execute([$citaId]);
         if ($existing->fetch()) {
             echo "  Pago ya existe para cita #$citaId\n";
             continue;
         }
-        $stmtPag->execute([$citaId, $p["monto"], $p["metodo"], $p["fecha"]]);
-        echo "  Pago creado: cita #$citaId - \${$p["monto"]} ({$p["metodo"]})\n";
+        $stmtPag->execute([$citaId, $p["monto"], $p["estado"], $p["metodo"], $p["fecha"]]);
+        echo "  Pago creado: cita #$citaId - \${$p["monto"]} ({$p["estado"]} - {$p["metodo"]})\n";
     }
 
     $db->commit();

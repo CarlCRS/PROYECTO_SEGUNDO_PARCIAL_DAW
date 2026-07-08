@@ -181,6 +181,8 @@ class CitaController
             return $ret;
         }
 
+        $citaVieja = Cita::obtenerPorId($id);
+
         $datos = [
             "paciente_id" => $paciente_id,
             "medico_id"   => $medico_id,
@@ -191,6 +193,10 @@ class CitaController
         ];
 
         if (Cita::actualizar($id, $datos)) {
+            if ($citaVieja && intval($citaVieja["medico_id"]) !== $medico_id) {
+                $nuevaTarifa = Cita::obtenerTarifaPorMedico($medico_id);
+                Pago::actualizarMontoPorCita($id, $nuevaTarifa);
+            }
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita actualizada exitosamente"));
             exit;
         }

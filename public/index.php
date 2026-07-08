@@ -520,6 +520,8 @@ switch ($url) {
             $datos = $resultado["datos"];
             $listaPacientes = $resultado["pacientes"] ?? [];
             $listaMedicos = $resultado["medicos"];
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            $paciente_id = $paciente["id"] ?? 0;
             require __DIR__ . "/../app/views/citas/formulario.php";
         }
         break;

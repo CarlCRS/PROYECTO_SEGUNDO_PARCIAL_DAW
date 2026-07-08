@@ -34,9 +34,11 @@ class Pago
         return $stmt->fetch();
     }
 
-    public static function crear($datos)
+    public static function crear($datos, $pdo = null)
     {
-        $pdo = obtenerConexion();
+        if ($pdo === null) {
+            $pdo = obtenerConexion();
+        }
         $sql = "INSERT INTO pagos (cita_id, monto, estado_pago, metodo_pago, fecha_pago)
                 VALUES (:cita_id, :monto, :estado_pago, :metodo_pago, :fecha_pago)";
         $stmt = $pdo->prepare($sql);
@@ -66,6 +68,16 @@ class Pago
             ":metodo_pago" => $datos["metodo_pago"],
             ":fecha_pago"  => $datos["fecha_pago"],
         ]);
+    }
+
+    public static function actualizarMontoPorCita($citaId, $nuevoMonto, $pdo = null)
+    {
+        if ($pdo === null) {
+            $pdo = obtenerConexion();
+        }
+        $sql = "UPDATE pagos SET monto = :monto WHERE cita_id = :cita_id AND estado_pago = 'pendiente'";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([":monto" => $nuevoMonto, ":cita_id" => $citaId]);
     }
 
     public static function cancelarPorCita($citaId)
