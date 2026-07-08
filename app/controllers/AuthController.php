@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/Usuario.php";
+require_once __DIR__ . "/../models/Paciente.php";
 
 class AuthController
 {
@@ -50,10 +51,12 @@ class AuthController
         $nombre = trim($_POST["nombre"] ?? "");
         $email = trim($_POST["email"] ?? "");
         $password = trim($_POST["password"] ?? "");
+        $cedula = trim($_POST["cedula"] ?? "");
+        $telefono = trim($_POST["telefono"] ?? "");
         $errores = [];
 
-        if ($nombre === "" || $email === "" || $password === "") {
-            $errores[] = "Complete todos los campos";
+        if ($nombre === "" || $email === "" || $password === "" || $cedula === "") {
+            $errores[] = "Complete todos los campos obligatorios";
             return ["errores" => $errores];
         }
 
@@ -64,6 +67,11 @@ class AuthController
 
         if (Usuario::existeEmail($email)) {
             $errores[] = "Ese correo ya esta registrado";
+            return ["errores" => $errores];
+        }
+
+        if (Paciente::existeCedula($cedula)) {
+            $errores[] = "Esa cedula ya esta registrada";
             return ["errores" => $errores];
         }
 
@@ -79,13 +87,27 @@ class AuthController
             "rol"      => "paciente",
         ];
 
-        if (Usuario::crear($datos)) {
-            header("Location: ?url=auth/login&msg=" . urlencode("Registro exitoso. Inicie sesion"));
-            exit;
+        $usuarioId = Usuario::crear($datos);
+        if (!$usuarioId) {
+            $errores[] = "Error al registrar el usuario";
+            return ["errores" => $errores];
         }
 
-        $errores[] = "Error al registrar el usuario";
-        return ["errores" => $errores];
+        $pacienteDatos = [
+            "usuario_id"       => $usuarioId,
+            "nombre"           => htmlspecialchars($nombre),
+            "cedula"           => htmlspecialchars($cedula),
+            "telefono"         => htmlspecialchars($telefono),
+            "fecha_nacimiento" => null,
+        ];
+
+        if (!Paciente::crear($pacienteDatos)) {
+            $errores[] = "Error al crear el perfil de paciente";
+            return ["errores" => $errores];
+        }
+
+        header("Location: ?url=auth/login&msg=" . urlencode("Registro exitoso. Inicie sesion"));
+        exit;
     }
 
     public function logout()

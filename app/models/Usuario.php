@@ -18,12 +18,13 @@ class Usuario
         $sql = "INSERT INTO usuarios (nombre, email, password, rol)
                 VALUES (:nombre, :email, :password, :rol)";
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([
+        $ok = $stmt->execute([
             ":nombre"   => $datos["nombre"],
             ":email"    => $datos["email"],
             ":password" => password_hash($datos["password"], PASSWORD_DEFAULT),
             ":rol"      => $datos["rol"] ?? "admin",
         ]);
+        return $ok ? (int) $pdo->lastInsertId() : false;
     }
 
     public static function obtenerPorId($id)

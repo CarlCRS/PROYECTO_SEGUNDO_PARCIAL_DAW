@@ -30,6 +30,12 @@
             <label>Correo electronico</label>
             <input type="email" name="email" required>
 
+            <label>Cedula</label>
+            <input type="text" name="cedula" required>
+
+            <label>Telefono (opcional)</label>
+            <input type="text" name="telefono">
+
             <label>Contraseña</label>
             <input type="password" name="password" minlength="6" required>
 
