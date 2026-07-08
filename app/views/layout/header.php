@@ -59,9 +59,11 @@
         <?php if (isset($_SESSION["usuario"])): ?>
             <ul class="nav-links" id="navLinks">
                 <li><a href="?url=inicio" class="<?= ($url === 'inicio') ? 'active' : '' ?>">Inicio</a></li>
+                <?php if ($_SESSION["rol"] === "admin"): ?>
                 <li><a href="?url=pacientes/listar" class="<?= str_starts_with($url, 'pacientes') ? 'active' : '' ?>">Pacientes</a></li>
                 <li><a href="?url=medicos/listar" class="<?= str_starts_with($url, 'medicos') ? 'active' : '' ?>">Medicos</a></li>
                 <li><a href="?url=especialidades/listar" class="<?= str_starts_with($url, 'especialidades') ? 'active' : '' ?>">Especialidades</a></li>
+                <?php endif; ?>
                 <li><a href="?url=citas/listar" class="<?= str_starts_with($url, 'citas') ? 'active' : '' ?>">Citas</a></li>
                 <li class="user-badge-mobile">
                     <span class="user-name"><?= htmlspecialchars($_SESSION["usuario"]) ?></span>

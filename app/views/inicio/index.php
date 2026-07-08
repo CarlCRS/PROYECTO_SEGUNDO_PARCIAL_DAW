@@ -15,6 +15,8 @@
 
 <div class="grid-cards">
 
+    <?php if ($_SESSION["rol"] === "admin"): ?>
+
     <a href="?url=pacientes/listar" class="modulo-card">
         <div class="icono">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -26,7 +28,7 @@
         <p>Registre, edite y consulte la informacion de pacientes</p>
     </a>
 
-    <a href="?url=antecedentes/listar&paciente_id=0" class="modulo-card">
+    <a href="?url=pacientes/listar" class="modulo-card">
         <div class="icono">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -87,6 +89,8 @@
         <p>Tarifas y servicios por especialidad</p>
     </a>
 
+    <?php endif; ?>
+
     <a href="?url=citas/listar" class="modulo-card">
         <div class="icono">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -103,6 +107,8 @@
         <p>Agendamiento y control de citas medicas</p>
     </a>
 
+    <?php if ($_SESSION["rol"] === "admin"): ?>
+
     <a href="?url=citas/listar" class="modulo-card">
         <div class="icono">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -115,6 +121,8 @@
         <h3>Pagos</h3>
         <p>Registro de pagos por cita</p>
     </a>
+
+    <?php endif; ?>
 
 </div>
 
