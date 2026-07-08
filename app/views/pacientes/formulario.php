@@ -31,6 +31,16 @@
         <label>Telefono</label>
         <input type="text" name="telefono" value="<?= htmlspecialchars($datos["telefono"] ?? "") ?>" pattern="[0-9]+" title="Solo digitos">
 
+        <label>Usuario asociado (opcional)</label>
+        <select name="usuario_id">
+            <option value="">-- Sin usuario --</option>
+            <?php foreach ($listaUsuarios ?? [] as $u): ?>
+                <option value="<?= $u["id"] ?>" <?= (intval($datos["usuario_id"] ?? 0) === intval($u["id"])) ? "selected" : "" ?>>
+                    <?= htmlspecialchars($u["nombre"]) ?> (<?= htmlspecialchars($u["email"]) ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
+
         <label>Fecha de nacimiento</label>
         <input type="date" name="fecha_nacimiento" value="<?= htmlspecialchars($datos["fecha_nacimiento"] ?? "") ?>">
 

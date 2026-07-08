@@ -1,26 +1,43 @@
 <?php
 require_once __DIR__ . "/../models/Cita.php";
+require_once __DIR__ . "/../models/Paciente.php";
 
 class CitaController
 {
     public function listar()
     {
-        $citas = Cita::obtenerTodas();
+        if ($_SESSION["rol"] === "admin") {
+            $citas = Cita::obtenerTodas();
+        } else {
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            $citas = $paciente ? Cita::obtenerPorPaciente($paciente["id"]) : [];
+        }
         return $citas;
     }
 
     public function crear()
     {
-        $pacientes = Cita::obtenerPacientes();
         $medicos = Cita::obtenerMedicos();
-        return ["pacientes" => $pacientes, "medicos" => $medicos];
+        $resultado = ["medicos" => $medicos];
+
+        if ($_SESSION["rol"] === "admin") {
+            $resultado["pacientes"] = Cita::obtenerPacientes();
+        } else {
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            $resultado["paciente_id"] = $paciente["id"] ?? 0;
+            $resultado["pacientes"] = [];
+        }
+
+        return $resultado;
     }
 
     public function guardar()
     {
         $errores = [];
 
-        $paciente_id = intval($_POST["paciente_id"] ?? 0);
+        $paciente_id = $_SESSION["rol"] === "admin"
+            ? intval($_POST["paciente_id"] ?? 0)
+            : intval(Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"])["id"] ?? 0);
         $medico_id = intval($_POST["medico_id"] ?? 0);
         $fecha = trim($_POST["fecha"] ?? "");
         $hora = trim($_POST["hora"] ?? "");
@@ -45,16 +62,22 @@ class CitaController
         }
 
         if (!empty($errores)) {
-            $pacientes = Cita::obtenerPacientes();
             $medicos = Cita::obtenerMedicos();
-            return ["errores" => $errores, "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+            $ret = ["errores" => $errores, "datos" => $_POST, "medicos" => $medicos];
+            if ($_SESSION["rol"] === "admin") {
+                $ret["pacientes"] = Cita::obtenerPacientes();
+            }
+            return $ret;
         }
 
         if (Cita::existeCruceHorario($medico_id, $fecha, $hora)) {
             $errores[] = "El medico ya tiene una cita agendada en esa fecha y hora";
-            $pacientes = Cita::obtenerPacientes();
             $medicos = Cita::obtenerMedicos();
-            return ["errores" => $errores, "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+            $ret = ["errores" => $errores, "datos" => $_POST, "medicos" => $medicos];
+            if ($_SESSION["rol"] === "admin") {
+                $ret["pacientes"] = Cita::obtenerPacientes();
+            }
+            return $ret;
         }
 
         $datos = [
@@ -70,9 +93,12 @@ class CitaController
             exit;
         }
 
-        $pacientes = Cita::obtenerPacientes();
         $medicos = Cita::obtenerMedicos();
-        return ["errores" => ["Error al registrar la cita"], "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+        $ret = ["errores" => ["Error al registrar la cita"], "datos" => $_POST, "medicos" => $medicos];
+        if ($_SESSION["rol"] === "admin") {
+            $ret["pacientes"] = Cita::obtenerPacientes();
+        }
+        return $ret;
     }
 
     public function editar($id)
@@ -82,10 +108,16 @@ class CitaController
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita no encontrada"));
             exit;
         }
-        $pacientes = Cita::obtenerPacientes();
+        if ($_SESSION["rol"] !== "admin") {
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            if (!$paciente || intval($cita["paciente_id"]) !== intval($paciente["id"])) {
+                header("Location: ?url=citas/listar&msg=" . urlencode("No puedes editar citas de otros pacientes"));
+                exit;
+            }
+        }
         $medicos = Cita::obtenerMedicos();
-        $cita["pacientes"] = $pacientes;
         $cita["medicos"] = $medicos;
+        $cita["pacientes"] = $_SESSION["rol"] === "admin" ? Cita::obtenerPacientes() : [];
         return $cita;
     }
 
@@ -94,7 +126,9 @@ class CitaController
         $id = intval($_POST["id"] ?? 0);
         $errores = [];
 
-        $paciente_id = intval($_POST["paciente_id"] ?? 0);
+        $paciente_id = $_SESSION["rol"] === "admin"
+            ? intval($_POST["paciente_id"] ?? 0)
+            : intval(Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"])["id"] ?? 0);
         $medico_id = intval($_POST["medico_id"] ?? 0);
         $fecha = trim($_POST["fecha"] ?? "");
         $hora = trim($_POST["hora"] ?? "");
@@ -118,16 +152,22 @@ class CitaController
         }
 
         if (!empty($errores)) {
-            $pacientes = Cita::obtenerPacientes();
             $medicos = Cita::obtenerMedicos();
-            return ["errores" => $errores, "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+            $ret = ["errores" => $errores, "datos" => $_POST, "medicos" => $medicos];
+            if ($_SESSION["rol"] === "admin") {
+                $ret["pacientes"] = Cita::obtenerPacientes();
+            }
+            return $ret;
         }
 
         if (Cita::existeCruceHorario($medico_id, $fecha, $hora, $id)) {
             $errores[] = "El medico ya tiene una cita agendada en esa fecha y hora";
-            $pacientes = Cita::obtenerPacientes();
             $medicos = Cita::obtenerMedicos();
-            return ["errores" => $errores, "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+            $ret = ["errores" => $errores, "datos" => $_POST, "medicos" => $medicos];
+            if ($_SESSION["rol"] === "admin") {
+                $ret["pacientes"] = Cita::obtenerPacientes();
+            }
+            return $ret;
         }
 
         $datos = [
@@ -144,9 +184,12 @@ class CitaController
             exit;
         }
 
-        $pacientes = Cita::obtenerPacientes();
         $medicos = Cita::obtenerMedicos();
-        return ["errores" => ["Error al actualizar la cita"], "datos" => $_POST, "pacientes" => $pacientes, "medicos" => $medicos];
+        $ret = ["errores" => ["Error al actualizar la cita"], "datos" => $_POST, "medicos" => $medicos];
+        if ($_SESSION["rol"] === "admin") {
+            $ret["pacientes"] = Cita::obtenerPacientes();
+        }
+        return $ret;
     }
 
     public function eliminar($id)
@@ -155,6 +198,14 @@ class CitaController
         if (!$cita) {
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita no encontrada"));
             exit;
+        }
+
+        if ($_SESSION["rol"] !== "admin") {
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            if (!$paciente || intval($cita["paciente_id"]) !== intval($paciente["id"])) {
+                header("Location: ?url=citas/listar&msg=" . urlencode("No puedes cancelar citas de otros pacientes"));
+                exit;
+            }
         }
 
         if (Cita::cancelar($id)) {

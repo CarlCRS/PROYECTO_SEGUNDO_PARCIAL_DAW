@@ -22,6 +22,7 @@
             <input type="hidden" name="id" value="<?= htmlspecialchars($cita["id"]) ?>">
         <?php endif; ?>
 
+        <?php if ($_SESSION["rol"] === "admin"): ?>
         <label>Paciente</label>
         <select name="paciente_id" required>
             <option value="">Seleccione un paciente</option>
@@ -31,6 +32,11 @@
                 </option>
             <?php endforeach; ?>
         </select>
+        <?php else: ?>
+        <input type="hidden" name="paciente_id" value="<?= htmlspecialchars($paciente_id ?? 0) ?>">
+        <label>Paciente</label>
+        <p class="text-muted"><?= htmlspecialchars($_SESSION["usuario"]) ?> (tu cuenta)</p>
+        <?php endif; ?>
 
         <label>Medico</label>
         <select name="medico_id" required>

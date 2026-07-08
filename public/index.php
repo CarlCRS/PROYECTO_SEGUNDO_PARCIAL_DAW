@@ -86,10 +86,11 @@ switch ($url) {
     case "pacientes/crear":
         requiereAuth();
         $controller = new PacienteController();
-        $controller->crear();
+        $data = $controller->crear();
         $esEdicion = false;
         $errores = [];
         $datos = [];
+        $listaUsuarios = $data["usuarios"];
         require __DIR__ . "/../app/views/pacientes/formulario.php";
         break;
 
@@ -101,6 +102,7 @@ switch ($url) {
             $esEdicion = false;
             $errores = $resultado["errores"];
             $datos = $resultado["datos"];
+            $listaUsuarios = $resultado["usuarios"];
             require __DIR__ . "/../app/views/pacientes/formulario.php";
         }
         break;
@@ -113,6 +115,7 @@ switch ($url) {
         $esEdicion = true;
         $errores = [];
         $datos = $paciente;
+        $listaUsuarios = $paciente["usuarios"];
         require __DIR__ . "/../app/views/pacientes/formulario.php";
         break;
 
@@ -124,6 +127,7 @@ switch ($url) {
             $esEdicion = true;
             $errores = $resultado["errores"];
             $datos = $resultado["datos"];
+            $listaUsuarios = $resultado["usuarios"];
             $paciente = $datos;
             require __DIR__ . "/../app/views/pacientes/formulario.php";
         }
@@ -484,7 +488,8 @@ switch ($url) {
         $esEdicion = false;
         $errores = [];
         $datos = ["paciente_id" => "", "medico_id" => "", "fecha" => "", "hora" => "", "motivo" => ""];
-        $listaPacientes = $data["pacientes"];
+        $listaPacientes = $data["pacientes"] ?? [];
+        $paciente_id = $data["paciente_id"] ?? 0;
         $listaMedicos = $data["medicos"];
         require __DIR__ . "/../app/views/citas/formulario.php";
         break;
@@ -497,7 +502,7 @@ switch ($url) {
             $esEdicion = false;
             $errores = $resultado["errores"];
             $datos = $resultado["datos"];
-            $listaPacientes = $resultado["pacientes"];
+            $listaPacientes = $resultado["pacientes"] ?? [];
             $listaMedicos = $resultado["medicos"];
             require __DIR__ . "/../app/views/citas/formulario.php";
         }
@@ -511,7 +516,7 @@ switch ($url) {
         $esEdicion = true;
         $errores = [];
         $datos = $cita;
-        $listaPacientes = $cita["pacientes"];
+        $listaPacientes = $cita["pacientes"] ?? [];
         $listaMedicos = $cita["medicos"];
         require __DIR__ . "/../app/views/citas/formulario.php";
         break;
@@ -524,7 +529,7 @@ switch ($url) {
             $esEdicion = true;
             $errores = $resultado["errores"];
             $datos = $resultado["datos"];
-            $listaPacientes = $resultado["pacientes"];
+            $listaPacientes = $resultado["pacientes"] ?? [];
             $listaMedicos = $resultado["medicos"];
             $cita = $datos;
             require __DIR__ . "/../app/views/citas/formulario.php";
@@ -542,9 +547,20 @@ switch ($url) {
     case "pagos/listar":
         requiereAuth();
         $cita_id = intval($_GET["cita_id"] ?? 0);
+        $cita_info = Cita::obtenerPorId($cita_id);
+        if (!$cita_info) {
+            header("Location: ?url=citas/listar&msg=" . urlencode("Cita no encontrada"));
+            exit;
+        }
+        if ($_SESSION["rol"] !== "admin") {
+            $paciente = Paciente::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+            if (!$paciente || intval($cita_info["paciente_id"]) !== intval($paciente["id"])) {
+                header("Location: ?url=citas/listar&msg=" . urlencode("No puedes ver pagos de otros pacientes"));
+                exit;
+            }
+        }
         $controller = new PagoController();
         $pagos = $controller->listar($cita_id);
-        $cita_info = Cita::obtenerPorId($cita_id);
         require __DIR__ . "/../app/views/pagos/listar.php";
         break;
 
