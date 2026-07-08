@@ -1,8 +1,23 @@
 <?php
 require_once __DIR__ . "/../../config/conexion.php";
+require_once __DIR__ . "/Pago.php";
 
 class Cita
 {
+    public static function obtenerTarifaPorMedico($medicoId)
+    {
+        $pdo = obtenerConexion();
+        $sql = "SELECT COALESCE(s.tarifa, 0) AS tarifa
+                FROM medicos m
+                LEFT JOIN servicios s ON m.especialidad_id = s.especialidad_id
+                WHERE m.id = :medico_id
+                LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":medico_id" => $medicoId]);
+        $row = $stmt->fetch();
+        return $row ? floatval($row["tarifa"]) : 0;
+    }
+
     public static function obtenerTodas()
     {
         $pdo = obtenerConexion();
@@ -63,16 +78,37 @@ class Cita
     public static function crear($datos)
     {
         $pdo = obtenerConexion();
-        $sql = "INSERT INTO citas (paciente_id, medico_id, fecha, hora, motivo)
-                VALUES (:paciente_id, :medico_id, :fecha, :hora, :motivo)";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([
-            ":paciente_id" => $datos["paciente_id"],
-            ":medico_id"   => $datos["medico_id"],
-            ":fecha"       => $datos["fecha"],
-            ":hora"        => $datos["hora"],
-            ":motivo"      => $datos["motivo"],
-        ]);
+        $pdo->beginTransaction();
+        try {
+            $sql = "INSERT INTO citas (paciente_id, medico_id, fecha, hora, motivo)
+                    VALUES (:paciente_id, :medico_id, :fecha, :hora, :motivo)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ":paciente_id" => $datos["paciente_id"],
+                ":medico_id"   => $datos["medico_id"],
+                ":fecha"       => $datos["fecha"],
+                ":hora"        => $datos["hora"],
+                ":motivo"      => $datos["motivo"],
+            ]);
+            $citaId = (int) $pdo->lastInsertId();
+
+            $tarifa = self::obtenerTarifaPorMedico($datos["medico_id"]);
+
+            $pagoDatos = [
+                "cita_id"     => $citaId,
+                "monto"       => $tarifa,
+                "estado_pago" => "pendiente",
+                "metodo_pago" => "pendiente",
+                "fecha_pago"  => date("Y-m-d"),
+            ];
+            Pago::crear($pagoDatos);
+
+            $pdo->commit();
+            return $citaId;
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            return false;
+        }
     }
 
     public static function actualizar($id, $datos)

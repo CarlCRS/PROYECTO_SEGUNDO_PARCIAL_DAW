@@ -580,40 +580,13 @@ switch ($url) {
         require __DIR__ . "/../app/views/pagos/listar.php";
         break;
 
-    case "pagos/crear":
-        requiereAdmin();
-        $cita_id = intval($_GET["cita_id"] ?? 0);
-        $controller = new PagoController();
-        $data = $controller->crear();
-        $esEdicion = false;
-        $errores = [];
-        $datos = ["cita_id" => $cita_id, "monto" => "", "metodo_pago" => "", "fecha_pago" => date("Y-m-d")];
-        $listaCitas = $data["citas"];
-        require __DIR__ . "/../app/views/pagos/formulario.php";
-        break;
-
-    case "pagos/guardar":
-        requiereAdmin();
-        $controller = new PagoController();
-        $resultado = $controller->guardar();
-        if (isset($resultado["errores"])) {
-            $esEdicion = false;
-            $errores = $resultado["errores"];
-            $datos = $resultado["datos"];
-            $listaCitas = $resultado["citas"];
-            require __DIR__ . "/../app/views/pagos/formulario.php";
-        }
-        break;
-
     case "pagos/editar":
         requiereAdmin();
         $id = intval($_GET["id"] ?? 0);
         $controller = new PagoController();
         $pago = $controller->editar($id);
-        $esEdicion = true;
         $errores = [];
-        $datos = $pago;
-        $listaCitas = $pago["citas"];
+        $datos = [];
         require __DIR__ . "/../app/views/pagos/formulario.php";
         break;
 
@@ -622,20 +595,11 @@ switch ($url) {
         $controller = new PagoController();
         $resultado = $controller->actualizar();
         if (isset($resultado["errores"])) {
-            $esEdicion = true;
             $errores = $resultado["errores"];
             $datos = $resultado["datos"];
-            $listaCitas = $resultado["citas"];
-            $pago = $datos;
+            $pago = Pago::obtenerPorId(intval($_POST["id"] ?? 0));
             require __DIR__ . "/../app/views/pagos/formulario.php";
         }
-        break;
-
-    case "pagos/eliminar":
-        requiereAdmin();
-        $id = intval($_GET["id"] ?? 0);
-        $controller = new PagoController();
-        $controller->eliminar($id);
         break;
 
     default:

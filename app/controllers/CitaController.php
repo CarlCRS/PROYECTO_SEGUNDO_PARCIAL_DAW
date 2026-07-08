@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../models/Cita.php";
 require_once __DIR__ . "/../models/Paciente.php";
+require_once __DIR__ . "/../models/Pago.php";
 
 class CitaController
 {
@@ -98,7 +99,7 @@ class CitaController
             "motivo"      => htmlspecialchars($motivo),
         ];
 
-        if (Cita::crear($datos)) {
+        if (Cita::crear($datos) !== false) {
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita registrada exitosamente"));
             exit;
         }
@@ -219,6 +220,7 @@ class CitaController
         }
 
         if (Cita::cancelar($id)) {
+            Pago::cancelarPorCita($id);
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita cancelada exitosamente"));
             exit;
         }
