@@ -36,6 +36,9 @@
             <label>Telefono (opcional)</label>
             <input type="text" name="telefono">
 
+            <label>Fecha de nacimiento</label>
+            <input type="date" name="fecha_nacimiento" required>
+
             <label>Contraseña</label>
             <input type="password" name="password" minlength="6" required>
 

@@ -16,6 +16,21 @@ class Cita
         return $stmt->fetchAll();
     }
 
+    public static function obtenerPorMedico($medicoId)
+    {
+        $pdo = obtenerConexion();
+        $sql = "SELECT c.*, p.nombre AS paciente_nombre, m.nombre AS medico_nombre, e.nombre AS especialidad_nombre
+                FROM citas c
+                JOIN pacientes p ON c.paciente_id = p.id
+                JOIN medicos m ON c.medico_id = m.id
+                LEFT JOIN especialidades e ON m.especialidad_id = e.id
+                WHERE c.medico_id = :medico_id
+                ORDER BY c.fecha DESC, c.hora DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":medico_id" => $medicoId]);
+        return $stmt->fetchAll();
+    }
+
     public static function obtenerPorPaciente($pacienteId)
     {
         $pdo = obtenerConexion();

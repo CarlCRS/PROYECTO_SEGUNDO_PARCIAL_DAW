@@ -15,6 +15,16 @@ class CitaController
         return $citas;
     }
 
+    public function listarMedico()
+    {
+        $medico = Medico::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+        if (!$medico) {
+            header("Location: ?url=inicio&msg=" . urlencode("No tienes un perfil de medico vinculado"));
+            exit;
+        }
+        return Cita::obtenerPorMedico($medico["id"]);
+    }
+
     public function crear()
     {
         $medicos = Cita::obtenerMedicos();

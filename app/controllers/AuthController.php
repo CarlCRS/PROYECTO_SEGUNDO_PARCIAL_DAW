@@ -53,9 +53,10 @@ class AuthController
         $password = trim($_POST["password"] ?? "");
         $cedula = trim($_POST["cedula"] ?? "");
         $telefono = trim($_POST["telefono"] ?? "");
+        $fecha_nacimiento = trim($_POST["fecha_nacimiento"] ?? "");
         $errores = [];
 
-        if ($nombre === "" || $email === "" || $password === "" || $cedula === "") {
+        if ($nombre === "" || $email === "" || $password === "" || $cedula === "" || $fecha_nacimiento === "") {
             $errores[] = "Complete todos los campos obligatorios";
             return ["errores" => $errores];
         }
@@ -98,7 +99,7 @@ class AuthController
             "nombre"           => htmlspecialchars($nombre),
             "cedula"           => htmlspecialchars($cedula),
             "telefono"         => htmlspecialchars($telefono),
-            "fecha_nacimiento" => null,
+            "fecha_nacimiento" => $fecha_nacimiento,
         ];
 
         if (!Paciente::crear($pacienteDatos)) {
