@@ -63,8 +63,12 @@
                 <li><a href="?url=pacientes/listar" class="<?= str_starts_with($url, 'pacientes') ? 'active' : '' ?>">Pacientes</a></li>
                 <li><a href="?url=medicos/listar" class="<?= str_starts_with($url, 'medicos') ? 'active' : '' ?>">Medicos</a></li>
                 <li><a href="?url=especialidades/listar" class="<?= str_starts_with($url, 'especialidades') ? 'active' : '' ?>">Especialidades</a></li>
+                <?php elseif ($_SESSION["rol"] === "medico"): ?>
+                <li><a href="?url=citas/medico" class="<?= str_starts_with($url, 'citas') ? 'active' : '' ?>">Mis Citas</a></li>
                 <?php endif; ?>
+                <?php if ($_SESSION["rol"] !== "medico"): ?>
                 <li><a href="?url=citas/listar" class="<?= str_starts_with($url, 'citas') ? 'active' : '' ?>">Citas</a></li>
+                <?php endif; ?>
                 <li class="user-badge-mobile">
                     <span class="user-name"><?= htmlspecialchars($_SESSION["usuario"]) ?></span>
                     <span class="role-tag"><?= htmlspecialchars($_SESSION["rol"]) ?></span>

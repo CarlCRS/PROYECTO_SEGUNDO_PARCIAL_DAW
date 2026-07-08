@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../models/Cita.php";
 require_once __DIR__ . "/../models/Paciente.php";
+require_once __DIR__ . "/../models/Pago.php";
 
 class CitaController
 {
@@ -13,6 +14,16 @@ class CitaController
             $citas = $paciente ? Cita::obtenerPorPaciente($paciente["id"]) : [];
         }
         return $citas;
+    }
+
+    public function listarMedico()
+    {
+        $medico = Medico::obtenerPorUsuarioId($_SESSION["id_usuario"]);
+        if (!$medico) {
+            header("Location: ?url=inicio&msg=" . urlencode("No tienes un perfil de medico vinculado"));
+            exit;
+        }
+        return Cita::obtenerPorMedico($medico["id"]);
     }
 
     public function crear()
@@ -88,7 +99,7 @@ class CitaController
             "motivo"      => htmlspecialchars($motivo),
         ];
 
-        if (Cita::crear($datos)) {
+        if (Cita::crear($datos) !== false) {
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita registrada exitosamente"));
             exit;
         }
@@ -170,6 +181,8 @@ class CitaController
             return $ret;
         }
 
+        $citaVieja = Cita::obtenerPorId($id);
+
         $datos = [
             "paciente_id" => $paciente_id,
             "medico_id"   => $medico_id,
@@ -180,6 +193,10 @@ class CitaController
         ];
 
         if (Cita::actualizar($id, $datos)) {
+            if ($citaVieja && intval($citaVieja["medico_id"]) !== $medico_id) {
+                $nuevaTarifa = Cita::obtenerTarifaPorMedico($medico_id);
+                Pago::actualizarMontoPorCita($id, $nuevaTarifa);
+            }
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita actualizada exitosamente"));
             exit;
         }
@@ -209,6 +226,7 @@ class CitaController
         }
 
         if (Cita::cancelar($id)) {
+            Pago::cancelarPorCita($id);
             header("Location: ?url=citas/listar&msg=" . urlencode("Cita cancelada exitosamente"));
             exit;
         }

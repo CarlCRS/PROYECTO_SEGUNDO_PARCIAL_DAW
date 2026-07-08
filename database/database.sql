@@ -79,7 +79,8 @@ CREATE TABLE pagos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cita_id INT NOT NULL,
     monto DECIMAL(8,2) NOT NULL,
-    metodo_pago ENUM('efectivo','tarjeta','transferencia') NOT NULL,
+    estado_pago ENUM('pendiente','pagado','cancelado','reembolsado') NOT NULL DEFAULT 'pendiente',
+    metodo_pago ENUM('pendiente','efectivo','tarjeta','transferencia') NOT NULL DEFAULT 'pendiente',
     fecha_pago DATE NOT NULL,
     FOREIGN KEY (cita_id) REFERENCES citas(id) ON DELETE CASCADE
 );

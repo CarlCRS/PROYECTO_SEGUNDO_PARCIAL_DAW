@@ -34,16 +34,19 @@ class Pago
         return $stmt->fetch();
     }
 
-    public static function crear($datos)
+    public static function crear($datos, $pdo = null)
     {
-        $pdo = obtenerConexion();
-        $sql = "INSERT INTO pagos (cita_id, monto, metodo_pago, fecha_pago)
-                VALUES (:cita_id, :monto, :metodo_pago, :fecha_pago)";
+        if ($pdo === null) {
+            $pdo = obtenerConexion();
+        }
+        $sql = "INSERT INTO pagos (cita_id, monto, estado_pago, metodo_pago, fecha_pago)
+                VALUES (:cita_id, :monto, :estado_pago, :metodo_pago, :fecha_pago)";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
             ":cita_id"     => $datos["cita_id"],
             ":monto"       => $datos["monto"],
-            ":metodo_pago" => $datos["metodo_pago"],
+            ":estado_pago" => $datos["estado_pago"] ?? "pendiente",
+            ":metodo_pago" => $datos["metodo_pago"] ?? "pendiente",
             ":fecha_pago"  => $datos["fecha_pago"],
         ]);
     }
@@ -53,6 +56,7 @@ class Pago
         $pdo = obtenerConexion();
         $sql = "UPDATE pagos SET
                     monto = :monto,
+                    estado_pago = :estado_pago,
                     metodo_pago = :metodo_pago,
                     fecha_pago = :fecha_pago
                 WHERE id = :id";
@@ -60,9 +64,28 @@ class Pago
         return $stmt->execute([
             ":id"          => $id,
             ":monto"       => $datos["monto"],
+            ":estado_pago" => $datos["estado_pago"],
             ":metodo_pago" => $datos["metodo_pago"],
             ":fecha_pago"  => $datos["fecha_pago"],
         ]);
+    }
+
+    public static function actualizarMontoPorCita($citaId, $nuevoMonto, $pdo = null)
+    {
+        if ($pdo === null) {
+            $pdo = obtenerConexion();
+        }
+        $sql = "UPDATE pagos SET monto = :monto WHERE cita_id = :cita_id AND estado_pago = 'pendiente'";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([":monto" => $nuevoMonto, ":cita_id" => $citaId]);
+    }
+
+    public static function cancelarPorCita($citaId)
+    {
+        $pdo = obtenerConexion();
+        $sql = "UPDATE pagos SET estado_pago = 'cancelado' WHERE cita_id = :cita_id AND estado_pago != 'cancelado'";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([":cita_id" => $citaId]);
     }
 
     public static function eliminar($id)

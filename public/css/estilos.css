@@ -823,6 +823,16 @@ textarea {
   color: var(--color-danger);
 }
 
+.estado-pagado {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.estado-reembolsado {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
 /* ========== FOOTER ========== */
 
 .footer {
